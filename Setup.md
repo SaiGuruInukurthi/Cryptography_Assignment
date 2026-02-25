@@ -94,6 +94,93 @@ Invoke-RestMethod -Method Post -Uri http://127.0.0.1:8000/process -Body $body -C
 ---
 
 ## 6) Troubleshooting
-- **Port 8000 busy**: run backend on another port (e.g. `--port 8001`) and update frontend API URL in `frontend/src/api.ts`.
+- **Port 8000 busy**: run backend on another port (e.g. `--port 8001`) and set `REACT_APP_API_BASE` in `frontend/.env.development`.
 - **Conda env not found**: run `conda env list` and create `crypto` if missing.
 - **Frontend dependency issues**: delete `frontend/node_modules` and run `npm install` again.
+
+---
+
+## 7) Test on mobile using ngrok
+
+### 7.1 Install ngrok (Windows)
+Use one of the following:
+
+```powershell
+winget install --id Ngrok.Ngrok -e
+```
+
+or
+
+```powershell
+choco install ngrok
+```
+
+Then connect your account once:
+
+```powershell
+ngrok config add-authtoken <YOUR_AUTHTOKEN>
+```
+
+Get token from: `https://dashboard.ngrok.com/get-started/your-authtoken`
+
+### 7.2 Start local servers
+Terminal 1 (backend):
+
+```powershell
+cd c:\Cryptography_Assignment\backend
+conda activate crypto
+uvicorn main:app --reload --port 8000
+```
+
+Terminal 2 (frontend):
+
+```powershell
+cd c:\Cryptography_Assignment\frontend
+npm start
+```
+
+### 7.3 Expose both ports with a **single ngrok agent** (free-plan friendly)
+Do **not** run `ngrok http 8000` and `ngrok http 3000` in separate terminals.
+
+Create/edit ngrok config at:
+`C:\Users\<YOUR_USER>\AppData\Local\ngrok\ngrok.yml`
+
+Add tunnels:
+
+```yaml
+tunnels:
+	backend:
+		proto: http
+		addr: 8000
+	frontend:
+		proto: http
+		addr: 3000
+```
+
+Then start both from one terminal:
+
+```powershell
+ngrok start --all
+```
+
+This opens both public URLs under a single agent session and avoids `ERR_NGROK_108`.
+
+### 7.4 Point frontend to tunneled backend
+In `frontend/.env.development`, set:
+
+```env
+REACT_APP_API_BASE=<YOUR_BACKEND_NGROK_HTTPS_URL>
+```
+
+Example:
+
+```env
+REACT_APP_API_BASE=https://abcd-1234.ngrok-free.app
+```
+
+Restart `npm start` after changing `.env.development`.
+
+### 7.5 Open on your mobile
+- Make sure phone and laptop both have internet.
+- Open the **frontend ngrok URL** on your phone.
+- Submit encryption/decryption requests; frontend will call backend through `REACT_APP_API_BASE`.
