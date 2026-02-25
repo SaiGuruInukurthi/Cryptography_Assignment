@@ -81,6 +81,12 @@ const ControlPanel: React.FC<Props> = ({ onSubmit, loading }) => {
       <button type="submit" disabled={loading || !text || (needsKey && !key)}>
         {loading ? 'processing...' : '[ run ]'}
       </button>
+
+      <div className="student-details">
+        <p className="student-line">name: i. sai guru</p>
+        <p className="student-line">roll.no: 2023003611</p>
+        <p className="student-line">e-mail: sinukurt@gitam.in</p>
+      </div>
     </form>
   );
 };

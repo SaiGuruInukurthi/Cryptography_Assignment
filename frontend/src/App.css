@@ -109,6 +109,19 @@ body {
   gap: 14px;
 }
 
+.student-details {
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px dashed var(--green-dark);
+}
+
+.student-line {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  line-height: 1.4;
+  word-break: break-all;
+}
+
 .field {
   display: flex;
   flex-direction: column;
