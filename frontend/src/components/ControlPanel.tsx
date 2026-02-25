@@ -84,9 +84,9 @@ const ControlPanel: React.FC<Props> = ({ onSubmit, loading }) => {
 
       <div className="student-meta-row">
         <div className="student-details">
-          <p className="student-line">name: i. sai guru</p>
-          <p className="student-line">roll.no: 2023003611</p>
-          <p className="student-line">e-mail: sinukurt@gitam.in</p>
+          <p className="student-line">Name: I. Sai Guru</p>
+          <p className="student-line">Roll.no: 2023003611</p>
+          <p className="student-line">E-mail: sinukurt@gitam.in</p>
         </div>
 
         <div className="input-actions">

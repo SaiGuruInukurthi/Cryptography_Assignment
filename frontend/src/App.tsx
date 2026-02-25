@@ -75,7 +75,7 @@ const App: React.FC = () => {
         </main>
 
         <footer className="app-footer">
-          <span className="dim">cryptography assignment mvp • 2026</span>
+          <span className="dim">Made this for my cryptography assignment on February 2026</span>
         </footer>
       </div>
     </div>
