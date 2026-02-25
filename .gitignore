@@ -1,0 +1,49 @@
+# -----------------------------
+# OS / Editor
+# -----------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# -----------------------------
+# Python / FastAPI (backend)
+# -----------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+backend/.venv/
+backend/venv/
+backend/env/
+backend/.env
+
+# -----------------------------
+# Node / React (frontend)
+# -----------------------------
+frontend/node_modules/
+frontend/build/
+frontend/.cache/
+frontend/.eslintcache
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/pnpm-debug.log*
+
+# -----------------------------
+# Local environment files
+# -----------------------------
+.env
+.env.*
+!.env.example
