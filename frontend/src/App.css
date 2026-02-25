@@ -181,9 +181,33 @@ button[type='submit']:disabled {
 .terminal-actions {
   display: flex;
   justify-content: flex-end;
+  gap: 8px;
   padding: 10px 12px;
   border-top: 1px solid var(--green-dark);
   background: #0f0f0f;
+}
+
+.copy-output-btn {
+  background: #112211;
+  color: var(--green);
+  border: 1px solid var(--green-dark);
+  border-radius: 4px;
+  padding: 6px 10px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  cursor: pointer;
+  text-transform: lowercase;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.copy-output-btn:hover:not(:disabled) {
+  border-color: var(--green);
+  box-shadow: 0 0 8px rgba(0, 255, 65, 0.35);
+}
+
+.copy-output-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
 }
 
 .clear-output-btn {

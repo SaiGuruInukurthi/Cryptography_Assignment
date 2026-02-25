@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import { ProcessResponse } from '../types';
 
 interface Props {
@@ -7,6 +7,39 @@ interface Props {
 }
 
 const TerminalOutput: React.FC<Props> = ({ history, onClear }) => {
+  const [copied, setCopied] = useState(false);
+
+  const latestCopyText = useMemo(() => {
+    if (history.length === 0) {
+      return '';
+    }
+    const latest = history[history.length - 1];
+    return latest.output || latest.error || '';
+  }, [history]);
+
+  const handleCopyOutput = async () => {
+    if (!latestCopyText) {
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(latestCopyText);
+    } catch {
+      const textArea = document.createElement('textarea');
+      textArea.value = latestCopyText;
+      textArea.style.position = 'fixed';
+      textArea.style.opacity = '0';
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+    }
+
+    setCopied(true);
+    window.setTimeout(() => setCopied(false), 1200);
+  };
+
   return (
     <div className="terminal-output">
       <div className="terminal-header">// output</div>
@@ -47,6 +80,14 @@ const TerminalOutput: React.FC<Props> = ({ history, onClear }) => {
         )}
       </div>
       <div className="terminal-actions">
+        <button
+          type="button"
+          className="copy-output-btn"
+          onClick={handleCopyOutput}
+          disabled={!latestCopyText}
+        >
+          {copied ? 'copied' : 'copy output'}
+        </button>
         <button
           type="button"
           className="clear-output-btn"
