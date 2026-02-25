@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { ProcessResponse } from '../types';
 
 interface Props {
@@ -8,6 +8,7 @@ interface Props {
 
 const TerminalOutput: React.FC<Props> = ({ history, onClear }) => {
   const [copied, setCopied] = useState(false);
+  const terminalBodyRef = useRef<HTMLDivElement>(null);
 
   const latestCopyText = useMemo(() => {
     if (history.length === 0) {
@@ -40,10 +41,22 @@ const TerminalOutput: React.FC<Props> = ({ history, onClear }) => {
     window.setTimeout(() => setCopied(false), 1200);
   };
 
+  useEffect(() => {
+    const terminalBody = terminalBodyRef.current;
+    if (!terminalBody) {
+      return;
+    }
+
+    terminalBody.scrollTo({
+      top: terminalBody.scrollHeight,
+      behavior: 'smooth',
+    });
+  }, [history.length]);
+
   return (
     <div className="terminal-output">
       <div className="terminal-header">// output</div>
-      <div className="terminal-body">
+      <div ref={terminalBodyRef} className="terminal-body">
         {history.length === 0 && (
           <p className="dim">waiting for input...<span className="cursor">█</span></p>
         )}
