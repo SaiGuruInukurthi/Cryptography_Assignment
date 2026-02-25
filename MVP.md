@@ -9,7 +9,7 @@ Build a **Minimum Viable Product (MVP)** that demonstrates the working mechanism
 
 Tech stack:
 - **Backend:** FastAPI (Python)
-- **Frontend:** React + TypeScript + basic CSS (terminal-style UI)
+- **Frontend:** React + TypeScript + basic CSS (terminal-style UI, **red & green** theme)
 - **Python environment:** Conda env `crypto`
 
 ---
@@ -25,15 +25,16 @@ Tech stack:
 - User provides text input:
   - PT (Plaintext) for encryption
   - CT (Ciphertext) for decryption
+- **Input is restricted to lowercase alphabets only (a–z). No digits, spaces, uppercase, or special characters allowed.**
 - App displays output in terminal-style panel.
 
 ### Algorithm Constraints
 - **Playfair**:
   - Supports encrypt + decrypt.
-  - Requires keyword/key from user.
+  - Requires keyword/key from user (also lowercase alphabets only).
 - **Two Columnar**:
   - Supports encrypt + decrypt.
-  - Requires key (column order or keyword).
+  - Requires key (column order or keyword, lowercase alphabets only).
 - **SHA-256**:
   - Supports only hashing (one-way).
   - If user chooses decryption with SHA-256, show a clear validation error message.
@@ -45,7 +46,7 @@ Tech stack:
 - Each algorithm in a **separate Python file**.
 - Fast response for short text inputs.
 - Basic input validation and clear error messages.
-- Simple but presentable UI with terminal aesthetics.
+- Simple but presentable UI with terminal aesthetics (**red & green** color scheme).
 
 ---
 
@@ -141,24 +142,30 @@ Backend default URL: `http://localhost:8000`
 {
   "mode": "encrypt | decrypt",
   "algorithm": "playfair | two_columnar | sha256",
-  "text": "string",
-  "key": "optional-string"
+  "text": "string (lowercase a-z only)",
+  "key": "optional-string (lowercase a-z only)"
 }
 ```
 
-## 7.2 Response Model (Success)
+## 7.2 Backend Input Validation
+- `text` must match regex `^[a-z]+$` — reject anything else with a 422 error.
+- `key` (when provided) must also match `^[a-z]+$`.
+- Use a Pydantic `field_validator` or `@validator` to enforce this on the request model.
+- Return a clear error message: `"Input must contain only lowercase alphabets (a-z)"`.
+
+## 7.3 Response Model (Success)
 ```json
 {
   "success": true,
   "algorithm": "playfair",
   "mode": "encrypt",
-  "input": "HELLO",
+  "input": "hello",
   "output": "...",
   "message": "Processed successfully"
 }
 ```
 
-## 7.3 Response Model (Validation/Error)
+## 7.4 Response Model (Validation/Error)
 ```json
 {
   "success": false,
@@ -166,11 +173,11 @@ Backend default URL: `http://localhost:8000`
 }
 ```
 
-## 7.4 API Endpoints
+## 7.5 API Endpoints
 - `POST /process` → core processing endpoint.
 - `GET /health` → returns service status.
 
-## 7.5 Routing Logic
+## 7.6 Routing Logic
 - If `algorithm == playfair`:
   - call `playfair.encrypt()` or `playfair.decrypt()`
 - If `algorithm == two_columnar`:
@@ -184,8 +191,9 @@ Backend default URL: `http://localhost:8000`
 ## 8) Algorithm Module Responsibilities
 
 ## 8.1 `playfair.py`
-- Build 5x5 key matrix (I/J normalization).
-- Preprocess plaintext digraphs (handle repeated letters, padding e.g., X).
+- Build 5x5 key matrix (i/j normalization — lowercase).
+- Preprocess plaintext digraphs (handle repeated letters, padding e.g., x).
+- All internal processing uses **lowercase** characters.
 - Implement:
   - `encrypt(plaintext: str, key: str) -> str`
   - `decrypt(ciphertext: str, key: str) -> str`
@@ -193,6 +201,7 @@ Backend default URL: `http://localhost:8000`
 ## 8.2 `two_columnar.py`
 - Implement classical two-columnar transposition logic.
 - Define consistent key interpretation for both encrypt/decrypt.
+- All internal processing uses **lowercase** characters.
 - Implement:
   - `encrypt(plaintext: str, key: str) -> str`
   - `decrypt(ciphertext: str, key: str) -> str`
@@ -201,6 +210,7 @@ Backend default URL: `http://localhost:8000`
 - Use Python `hashlib`.
 - Implement:
   - `hash_text(text: str) -> str`
+- Note: SHA-256 output is a hex digest (will contain 0-9 and a-f).
 
 ---
 
@@ -210,23 +220,58 @@ Backend default URL: `http://localhost:8000`
 - Mode selector: Encrypt / Decrypt
 - Algorithm selector (dropdown)
 - Text area for PT/CT
-- Key input (shown for Playfair and Two Columnar; optional/hidden for SHA-256)
+- Key input (shown for Playfair and Two Columnar; hidden for SHA-256)
 - Submit button (`Run`)
 - Output panel (terminal-style)
 
-## 9.2 Validation Rules
+## 9.2 Input Restriction (Lowercase Alphabets Only)
+- **Frontend enforcement (real-time):**
+  - Text input and key input fields accept only `a-z`.
+  - Use `onKeyDown` / `onChange` handler to strip or reject any character not matching `/^[a-z]*$/`.
+  - Optionally show an inline hint: `"only lowercase letters allowed"`.
+- **Backend enforcement (safety net):**
+  - Pydantic validator rejects non-conforming input with a clear error (see §7.2).
+
+## 9.3 Validation Rules
 - Require non-empty input text.
 - Require key for Playfair and Two Columnar.
 - Block SHA-256 decryption mode in UI (or allow submit and show backend error).
 
-## 9.3 Terminal-Style UX
-- Dark background
-- Monospace font
-- Green/amber text accents
+## 9.4 Terminal-Style UX — Red & Green Theme
+
+### Color Palette
+| Role              | Color              | Hex       |
+|-------------------|--------------------|-----------|
+| Background        | Near-black         | `#0a0a0a` |
+| Primary text      | Terminal green     | `#00ff41` |
+| Accent / errors   | Terminal red       | `#ff0033` |
+| Secondary text    | Dimmed green       | `#00cc33` |
+| Input borders     | Dark green         | `#00802b` |
+| Button bg         | Dark red           | `#990022` |
+| Button hover      | Bright red         | `#ff0033` |
+| Cursor / caret    | Green blink        | `#00ff41` |
+
+### Typography
+- Font family: `'Fira Code', 'Courier New', monospace`
+- Font size: 14–16px body, 12px labels
+
+### Layout
+- Dark full-page background (`#0a0a0a`).
+- Left panel / top section: controls (mode, algo, key, input) — bordered in dark green.
+- Right panel / bottom section: output — terminal-style box with green text.
+- Error messages displayed in **red** (`#ff0033`).
+- Success output displayed in **green** (`#00ff41`).
 - Prompt-like labels:
   - `> mode: encrypt`
   - `> algorithm: playfair`
-  - `> output: ...`
+  - `> key: monarchy`
+  - `> output: kfcpua...`
+- Optional blinking cursor `█` at end of output line.
+
+### CSS Strategy
+- Use CSS custom properties (variables) for the palette above.
+- Keep it in `App.css` — no CSS framework needed.
+- Dropdown and inputs styled to match terminal look (dark bg, green border, green text).
 
 ---
 
@@ -239,8 +284,8 @@ export type Algorithm = 'playfair' | 'two_columnar' | 'sha256';
 export interface ProcessRequest {
   mode: Mode;
   algorithm: Algorithm;
-  text: string;
-  key?: string;
+  text: string;       // lowercase a-z only
+  key?: string;       // lowercase a-z only
 }
 
 export interface ProcessResponse {
@@ -261,24 +306,25 @@ export interface ProcessResponse {
 ### Phase 1 – Backend Foundation
 1. Create backend folder and virtual setup.
 2. Build `main.py` with `/health` and `/process`.
-3. Add request/response validation via Pydantic.
+3. Add request/response validation via Pydantic, including `^[a-z]+$` regex check on `text` and `key`.
 
 ### Phase 2 – Algorithms
-4. Implement Playfair cipher module.
-5. Implement Two Columnar cipher module.
+4. Implement Playfair cipher module (lowercase throughout).
+5. Implement Two Columnar cipher module (lowercase throughout).
 6. Implement SHA-256 module with `hashlib`.
 7. Wire modules into `/process` dispatcher.
 
 ### Phase 3 – Frontend
 8. Generate React TypeScript app.
-9. Build form controls + dropdown + text areas.
-10. Connect frontend to backend via Axios.
-11. Build terminal-style output panel.
+9. Build form controls + dropdown + text areas with **lowercase-only input restriction**.
+10. Apply **red & green terminal theme** via CSS variables.
+11. Connect frontend to backend via Axios.
+12. Build terminal-style output panel (green success text, red error text).
 
 ### Phase 4 – QA + Demo Readiness
-12. Manual tests for all algorithms and both modes.
-13. Verify invalid flows (missing key, invalid mode for SHA-256).
-14. Prepare short demo script.
+13. Manual tests for all algorithms and both modes.
+14. Verify invalid flows (missing key, invalid mode for SHA-256, non-alphabetic input rejected).
+15. Prepare short demo script.
 
 ---
 
@@ -291,16 +337,19 @@ export interface ProcessResponse {
 5. **Validation**: empty text rejected.
 6. **Validation**: missing key rejected for Playfair/Two Columnar.
 7. **Validation**: SHA-256 with decryption returns error.
+8. **Input restriction**: uppercase letters rejected on frontend (filtered) and backend (422).
+9. **Input restriction**: digits / special chars rejected on frontend and backend.
 
 ---
 
 ## 13) Demo Script (for presentation)
 
-1. Open frontend terminal-style UI.
-2. Show Playfair encryption and decryption.
-3. Show Two Columnar encryption and decryption.
-4. Show SHA-256 hashing and explain one-way property.
-5. Trigger one invalid input to demonstrate error handling.
+1. Open frontend terminal-style UI (show red & green theme).
+2. Type invalid characters — show that input field only accepts lowercase letters.
+3. Show Playfair encryption and decryption.
+4. Show Two Columnar encryption and decryption.
+5. Show SHA-256 hashing and explain one-way property.
+6. Trigger one invalid input to demonstrate error handling (e.g., SHA-256 decrypt).
 
 ---
 
@@ -308,6 +357,8 @@ export interface ProcessResponse {
 - All 3 algorithms integrated and selectable from dropdown.
 - Encrypt/decrypt works where mathematically applicable.
 - SHA-256 hashing works and decryption is blocked gracefully.
+- **All text inputs (text + key) restricted to lowercase alphabets (a–z) on both frontend and backend.**
+- **UI uses a red & green terminal color scheme on a dark background.**
 - Backend and frontend run locally without extra tooling.
 - UI clearly displays inputs, selected config, and output in terminal style.
 - Codebase follows required separation (algorithm files independent).
@@ -319,13 +370,16 @@ export interface ProcessResponse {
 - Add small history log in terminal pane.
 - Add unit tests for algorithm functions.
 - Deploy backend/frontend locally with one command script.
+- Add a CRT scanline overlay effect for extra terminal authenticity.
 
 ---
 
 ## 16) Notes / Assumptions
 - For SHA-256, "encrypt" in UI is interpreted as "hash" for user simplicity.
-- Playfair output may include normalization effects (I/J merge, padding letters).
+- Playfair output may include normalization effects (i/j merge, padding letters) — all lowercase.
 - Two Columnar implementation should define and document the exact key interpretation to avoid ambiguity in grading.
+- SHA-256 output is hex (0-9, a-f) — this is the only output that isn't purely a-z.
+- Input restriction simplifies algorithm logic (no need to handle mixed-case, numbers, or punctuation).
 
 ---
 
@@ -333,6 +387,8 @@ export interface ProcessResponse {
 - [ ] Conda env `crypto` created and activated
 - [ ] Backend runs on port 8000
 - [ ] Frontend runs on port 3000
+- [ ] Red & green terminal theme visible
+- [ ] Input fields reject non-lowercase characters
 - [ ] `/process` endpoint tested via frontend
 - [ ] All three algorithms demonstrated end-to-end
 - [ ] MVP ready for assignment demo
