@@ -82,10 +82,23 @@ const ControlPanel: React.FC<Props> = ({ onSubmit, loading }) => {
         {loading ? 'processing...' : '[ run ]'}
       </button>
 
-      <div className="student-details">
-        <p className="student-line">name: i. sai guru</p>
-        <p className="student-line">roll.no: 2023003611</p>
-        <p className="student-line">e-mail: sinukurt@gitam.in</p>
+      <div className="student-meta-row">
+        <div className="student-details">
+          <p className="student-line">name: i. sai guru</p>
+          <p className="student-line">roll.no: 2023003611</p>
+          <p className="student-line">e-mail: sinukurt@gitam.in</p>
+        </div>
+
+        <div className="input-actions">
+          <a
+            className="github-link-btn"
+            href="https://github.com/SaiGuruInukurthi/Cryptography_Assignment"
+            target="_blank"
+            rel="noreferrer"
+          >
+            link to github
+          </a>
+        </div>
       </div>
     </form>
   );

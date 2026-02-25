@@ -109,10 +109,18 @@ body {
   gap: 14px;
 }
 
-.student-details {
+.student-meta-row {
   margin-top: auto;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.student-details {
   padding-top: 14px;
   border-top: 1px dashed var(--green-dark);
+  flex: 1;
 }
 
 .student-line {
@@ -120,6 +128,32 @@ body {
   color: var(--text-dim);
   line-height: 1.4;
   word-break: break-all;
+}
+
+.input-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+
+.github-link-btn {
+  display: inline-block;
+  margin-top: 2px;
+  background: #112211;
+  color: var(--green);
+  border: 1px solid var(--green-dark);
+  border-radius: 4px;
+  padding: 6px 10px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  text-transform: lowercase;
+  text-decoration: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.github-link-btn:hover {
+  border-color: var(--green);
+  box-shadow: 0 0 8px rgba(0, 255, 65, 0.35);
 }
 
 .field {
