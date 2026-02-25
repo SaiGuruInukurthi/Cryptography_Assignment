@@ -184,3 +184,65 @@ Restart `npm start` after changing `.env.development`.
 - Make sure phone and laptop both have internet.
 - Open the **frontend ngrok URL** on your phone.
 - Submit encryption/decryption requests; frontend will call backend through `REACT_APP_API_BASE`.
+
+---
+
+## 8) Deploy on Vercel
+
+Deploy as **two Vercel projects**:
+- Project A: `backend/` (FastAPI API)
+- Project B: `frontend/` (React UI)
+
+### 8.1 Install and login
+```bash
+npm i -g vercel
+vercel login
+```
+
+### 8.2 Deploy backend (FastAPI)
+From backend folder:
+
+```bash
+cd c:\Cryptography_Assignment\backend
+vercel
+```
+
+When prompted:
+- Link to existing project? `No` (first time)
+- Set project name: e.g. `crypto-backend`
+- Root directory: `.`
+
+After deploy, note backend URL (example):
+`https://crypto-backend.vercel.app`
+
+Health check:
+`https://crypto-backend.vercel.app/health`
+
+### 8.3 Deploy frontend (React)
+From frontend folder:
+
+```bash
+cd c:\Cryptography_Assignment\frontend
+vercel
+```
+
+Set environment variable in Vercel project:
+- Key: `REACT_APP_API_BASE`
+- Value: `https://<your-backend-vercel-domain>`
+
+You can set it using CLI:
+
+```bash
+vercel env add REACT_APP_API_BASE production
+```
+
+Then redeploy frontend:
+
+```bash
+vercel --prod
+```
+
+### 8.4 Verify deployment
+- Open frontend Vercel URL in browser/mobile.
+- Run one encrypt/decrypt request.
+- If request fails, confirm `REACT_APP_API_BASE` points to backend Vercel URL.
