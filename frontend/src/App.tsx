@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ControlPanel from './components/ControlPanel';
 import TerminalOutput from './components/TerminalOutput';
+import PixelSnow from './components/PixelSnow';
 import { processRequest } from './api';
 import { Mode, Algorithm, ProcessResponse } from './types';
 import './App.css';
@@ -44,20 +45,39 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="app">
-      <header className="app-header">
-        <h1>{'>'} crypto_terminal <span className="cursor-blink">_</span></h1>
-        <p className="subtitle">playfair · two columnar · sha256</p>
-      </header>
+    <div className="app-shell">
+      <div className="app-bg" aria-hidden="true">
+        <PixelSnow
+          color="#00ff41"
+          flakeSize={0.01}
+          minFlakeSize={1.25}
+          pixelResolution={200}
+          speed={1.25}
+          density={0.3}
+          direction={125}
+          brightness={1}
+          depthFade={8}
+          farPlane={20}
+          gamma={0.4545}
+          variant="square"
+        />
+      </div>
 
-      <main className="app-main">
-        <ControlPanel onSubmit={handleSubmit} loading={loading} />
-        <TerminalOutput history={history} onClear={handleClearOutputs} />
-      </main>
+      <div className="app">
+        <header className="app-header">
+          <h1>{'>'} crypto_terminal <span className="cursor-blink">_</span></h1>
+          <p className="subtitle">playfair · two columnar · sha256</p>
+        </header>
 
-      <footer className="app-footer">
-        <span className="dim">cryptography assignment mvp • 2026</span>
-      </footer>
+        <main className="app-main">
+          <ControlPanel onSubmit={handleSubmit} loading={loading} />
+          <TerminalOutput history={history} onClear={handleClearOutputs} />
+        </main>
+
+        <footer className="app-footer">
+          <span className="dim">cryptography assignment mvp • 2026</span>
+        </footer>
+      </div>
     </div>
   );
 };

@@ -31,9 +31,28 @@ body {
   min-height: 100vh;
 }
 
+#root {
+  min-height: 100vh;
+}
+
+.app-shell {
+  position: relative;
+  min-height: 100vh;
+  isolation: isolate;
+}
+
+.app-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.55;
+}
+
 /* ── App layout ──────────────────────────────── */
 
 .app {
+  position: relative;
+  z-index: 1;
   max-width: 960px;
   margin: 0 auto;
   padding: 24px 16px;
@@ -80,6 +99,8 @@ body {
 /* ── Control panel (form) ────────────────────── */
 
 .control-panel {
+  background: rgba(10, 10, 10, 0.86);
+  backdrop-filter: blur(2px);
   border: 1px solid var(--green-dark);
   border-radius: 6px;
   padding: 16px;
@@ -156,6 +177,8 @@ button[type='submit']:disabled {
 /* ── Terminal output ─────────────────────────── */
 
 .terminal-output {
+  background: rgba(10, 10, 10, 0.86);
+  backdrop-filter: blur(2px);
   border: 1px solid var(--green-dark);
   border-radius: 6px;
   display: flex;
