@@ -178,6 +178,37 @@ button[type='submit']:disabled {
   max-height: 60vh;
 }
 
+.terminal-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px 12px;
+  border-top: 1px solid var(--green-dark);
+  background: #0f0f0f;
+}
+
+.clear-output-btn {
+  background: var(--red-dark);
+  color: #fff;
+  border: 1px solid var(--red);
+  border-radius: 4px;
+  padding: 6px 10px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  cursor: pointer;
+  text-transform: lowercase;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.clear-output-btn:hover:not(:disabled) {
+  background: var(--red);
+  box-shadow: 0 0 8px rgba(255, 0, 51, 0.5);
+}
+
+.clear-output-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
 .terminal-body .entry {
   margin-bottom: 4px;
 }

@@ -3,9 +3,10 @@ import { ProcessResponse } from '../types';
 
 interface Props {
   history: ProcessResponse[];
+  onClear: () => void;
 }
 
-const TerminalOutput: React.FC<Props> = ({ history }) => {
+const TerminalOutput: React.FC<Props> = ({ history, onClear }) => {
   return (
     <div className="terminal-output">
       <div className="terminal-header">// output</div>
@@ -44,6 +45,16 @@ const TerminalOutput: React.FC<Props> = ({ history }) => {
         {history.length > 0 && (
           <p className="dim"><span className="cursor">█</span></p>
         )}
+      </div>
+      <div className="terminal-actions">
+        <button
+          type="button"
+          className="clear-output-btn"
+          onClick={onClear}
+          disabled={history.length === 0}
+        >
+          clear outputs
+        </button>
       </div>
     </div>
   );

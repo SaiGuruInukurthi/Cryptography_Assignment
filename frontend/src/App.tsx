@@ -39,6 +39,10 @@ const App: React.FC = () => {
     }
   };
 
+  const handleClearOutputs = () => {
+    setHistory([]);
+  };
+
   return (
     <div className="app">
       <header className="app-header">
@@ -48,7 +52,7 @@ const App: React.FC = () => {
 
       <main className="app-main">
         <ControlPanel onSubmit={handleSubmit} loading={loading} />
-        <TerminalOutput history={history} />
+        <TerminalOutput history={history} onClear={handleClearOutputs} />
       </main>
 
       <footer className="app-footer">
