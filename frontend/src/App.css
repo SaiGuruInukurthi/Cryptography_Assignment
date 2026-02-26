@@ -172,6 +172,11 @@ body {
   color: var(--text-dim);
 }
 
+.preprocess-hint {
+  color: var(--green-dim);
+  word-break: break-word;
+}
+
 .field select,
 .field input,
 .field textarea {

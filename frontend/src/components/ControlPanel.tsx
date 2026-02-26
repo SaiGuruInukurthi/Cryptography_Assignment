@@ -8,6 +8,32 @@ interface Props {
 
 const ALPHA_RE = /^[a-z]*$/;
 
+const buildPlayfairPreview = (value: string): string => {
+  const normalized = value.toLowerCase().replace(/[^a-z]/g, '').replace(/j/g, 'i');
+  const pairs: string[] = [];
+  let index = 0;
+
+  while (index < normalized.length) {
+    const first = normalized[index];
+
+    if (index + 1 < normalized.length) {
+      const second = normalized[index + 1];
+      if (first === second) {
+        pairs.push(`${first}x`);
+        index += 1;
+      } else {
+        pairs.push(`${first}${second}`);
+        index += 2;
+      }
+    } else {
+      pairs.push(`${first}x`);
+      index += 1;
+    }
+  }
+
+  return pairs.join(' ');
+};
+
 const ControlPanel: React.FC<Props> = ({ onSubmit, loading }) => {
   const [mode, setMode] = useState<Mode>('encrypt');
   const [algorithm, setAlgorithm] = useState<Algorithm>('playfair');
@@ -15,6 +41,10 @@ const ControlPanel: React.FC<Props> = ({ onSubmit, loading }) => {
   const [key, setKey] = useState('');
 
   const needsKey = algorithm !== 'sha512';
+  const playfairPreview =
+    algorithm === 'playfair' && mode === 'encrypt' && text
+      ? buildPlayfairPreview(text)
+      : '';
 
   const handleAlphaChange = (
     setter: React.Dispatch<React.SetStateAction<string>>
@@ -83,6 +113,9 @@ const ControlPanel: React.FC<Props> = ({ onSubmit, loading }) => {
           onChange={handleAlphaChange(setText)}
         />
         <span className="hint">a-z only</span>
+        {playfairPreview && (
+          <span className="hint preprocess-hint">digraphs: {playfairPreview}</span>
+        )}
       </div>
 
       <div className="form-actions">
