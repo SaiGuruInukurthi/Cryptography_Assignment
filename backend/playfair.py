@@ -79,7 +79,7 @@ def encrypt(plaintext: str, key: str) -> str:
 def decrypt(ciphertext: str, key: str) -> str:
     ciphertext = _normalize_text(ciphertext)
     if len(ciphertext) % 2 != 0:
-        raise ValueError("Playfair decryption requires even-length ciphertext")
+        ciphertext += "x"
 
     matrix = _generate_key_matrix(key)
     digraphs: list[tuple[str, str]] = []

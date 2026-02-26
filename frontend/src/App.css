@@ -199,9 +199,9 @@ body {
 }
 
 button[type='submit'] {
-  background: var(--red-dark);
-  color: #fff;
-  border: 1px solid var(--red);
+  background: #112211;
+  color: var(--green);
+  border: 1px solid var(--green-dark);
   border-radius: 4px;
   padding: 10px;
   font-family: var(--font-mono);
@@ -212,8 +212,9 @@ button[type='submit'] {
 }
 
 button[type='submit']:hover:not(:disabled) {
-  background: var(--red);
-  box-shadow: 0 0 10px rgba(255, 0, 51, 0.5);
+  background: #163316;
+  border-color: var(--green);
+  box-shadow: 0 0 10px rgba(0, 255, 65, 0.35);
 }
 
 button[type='submit']:disabled {
