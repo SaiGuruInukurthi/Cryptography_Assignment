@@ -114,6 +114,12 @@ def process(req: ProcessRequest):
                 error=f"A key is required for {req.algorithm.value}",
             )
 
+        if req.algorithm == Algorithm.playfair and req.mode == Mode.decrypt and len(req.text) % 2 != 0:
+            return ProcessResponse(
+                success=False,
+                error="Playfair decryption requires even-length ciphertext",
+            )
+
         if req.algorithm == Algorithm.playfair:
             fn = playfair.encrypt if req.mode == Mode.encrypt else playfair.decrypt
         else:
