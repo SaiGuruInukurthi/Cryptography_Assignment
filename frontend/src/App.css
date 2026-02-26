@@ -284,11 +284,14 @@ button[type='submit']:disabled {
 
 .terminal-actions {
   display: flex;
-  justify-content: flex-end;
   gap: 8px;
   padding: 10px 12px;
   border-top: 1px solid var(--green-dark);
   background: #0f0f0f;
+}
+
+.terminal-actions button {
+  flex: 1;
 }
 
 .copy-output-btn {
@@ -296,9 +299,9 @@ button[type='submit']:disabled {
   color: var(--green);
   border: 1px solid var(--green-dark);
   border-radius: 4px;
-  padding: 6px 10px;
+  padding: 10px;
   font-family: var(--font-mono);
-  font-size: 0.8rem;
+  font-size: 1rem;
   cursor: pointer;
   text-transform: lowercase;
   transition: border-color 0.2s, box-shadow 0.2s;
@@ -319,9 +322,9 @@ button[type='submit']:disabled {
   color: #fff;
   border: 1px solid var(--red);
   border-radius: 4px;
-  padding: 6px 10px;
+  padding: 10px;
   font-family: var(--font-mono);
-  font-size: 0.8rem;
+  font-size: 1rem;
   cursor: pointer;
   text-transform: lowercase;
   transition: background 0.2s, box-shadow 0.2s;
