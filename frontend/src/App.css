@@ -82,6 +82,7 @@ body {
   grid-template-columns: 1fr 1fr;
   gap: 20px;
   flex: 1;
+  align-items: start;
 }
 
 @media (max-width: 700px) {
@@ -107,6 +108,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 14px;
+  min-height: 660px;
 }
 
 .student-meta-row {
@@ -264,7 +266,9 @@ button[type='submit']:disabled {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  min-height: 0;
+  height: 660px;
+  min-height: 660px;
+  max-height: 660px;
 }
 
 .terminal-header {
