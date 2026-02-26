@@ -5,9 +5,15 @@ Uses i/j normalisation (j → i) and 'x' padding.
 """
 
 
+def _normalize_text(text: str) -> str:
+    """Keep letters only, lowercase, and map j -> i."""
+    cleaned = "".join(ch for ch in text.lower() if ch.isalpha())
+    return cleaned.replace("j", "i")
+
+
 def _generate_key_matrix(key: str) -> list[list[str]]:
     """Build the 5×5 Playfair key matrix."""
-    key = key.replace("j", "i")
+    key = _normalize_text(key)
     seen: set[str] = set()
     ordered: list[str] = []
     for ch in key:
@@ -31,7 +37,7 @@ def _find_position(matrix: list[list[str]], ch: str) -> tuple[int, int]:
 
 def _prepare_text(text: str) -> list[tuple[str, str]]:
     """Create digraphs: split doubles with 'x', pad odd length."""
-    text = text.replace("j", "i")
+    text = _normalize_text(text)
     digraphs: list[tuple[str, str]] = []
     i = 0
     while i < len(text):
@@ -51,6 +57,7 @@ def _prepare_text(text: str) -> list[tuple[str, str]]:
 
 
 def encrypt(plaintext: str, key: str) -> str:
+    plaintext = _normalize_text(plaintext)
     matrix = _generate_key_matrix(key)
     digraphs = _prepare_text(plaintext)
     result: list[str] = []
@@ -70,12 +77,14 @@ def encrypt(plaintext: str, key: str) -> str:
 
 
 def decrypt(ciphertext: str, key: str) -> str:
+    ciphertext = _normalize_text(ciphertext)
+    if len(ciphertext) % 2 != 0:
+        raise ValueError("Playfair decryption requires even-length ciphertext")
+
     matrix = _generate_key_matrix(key)
-    # ciphertext length should already be even
     digraphs: list[tuple[str, str]] = []
-    ct = ciphertext.replace("j", "i")
-    for i in range(0, len(ct), 2):
-        digraphs.append((ct[i], ct[i + 1]))
+    for i in range(0, len(ciphertext), 2):
+        digraphs.append((ciphertext[i], ciphertext[i + 1]))
 
     result: list[str] = []
     for a, b in digraphs:

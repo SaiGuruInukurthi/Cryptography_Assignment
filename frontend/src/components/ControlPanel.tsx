@@ -19,7 +19,7 @@ const ControlPanel: React.FC<Props> = ({ onSubmit, loading }) => {
   const handleAlphaChange = (
     setter: React.Dispatch<React.SetStateAction<string>>
   ) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const val = e.target.value.toLowerCase();
+    const val = e.target.value.toLowerCase().replace(/\s+/g, '');
     if (ALPHA_RE.test(val)) {
       setter(val);
     }
@@ -30,6 +30,13 @@ const ControlPanel: React.FC<Props> = ({ onSubmit, loading }) => {
     if (!text) return;
     if (needsKey && !key) return;
     onSubmit(mode, algorithm, text, key);
+  };
+
+  const handleClear = () => {
+    setMode('encrypt');
+    setAlgorithm('playfair');
+    setText('');
+    setKey('');
   };
 
   return (
@@ -78,9 +85,14 @@ const ControlPanel: React.FC<Props> = ({ onSubmit, loading }) => {
         <span className="hint">a-z only</span>
       </div>
 
-      <button type="submit" disabled={loading || !text || (needsKey && !key)}>
-        {loading ? 'processing...' : '[ run ]'}
-      </button>
+      <div className="form-actions">
+        <button type="submit" disabled={loading || !text || (needsKey && !key)}>
+          {loading ? 'processing...' : '[ run ]'}
+        </button>
+        <button type="button" className="clear-input-btn" onClick={handleClear}>
+          [ clear ]
+        </button>
+      </div>
 
       <div className="student-meta-row">
         <div className="student-details">

@@ -221,6 +221,33 @@ button[type='submit']:disabled {
   cursor: not-allowed;
 }
 
+.form-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.form-actions button {
+  flex: 1;
+}
+
+.clear-input-btn {
+  background: var(--red-dark);
+  color: #fff;
+  border: 1px solid var(--red);
+  border-radius: 4px;
+  padding: 10px;
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  cursor: pointer;
+  text-transform: lowercase;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.clear-input-btn:hover {
+  background: var(--red);
+  box-shadow: 0 0 10px rgba(255, 0, 51, 0.5);
+}
+
 /* ── Terminal output ─────────────────────────── */
 
 .terminal-output {
