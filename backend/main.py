@@ -53,6 +53,7 @@ class ProcessRequest(BaseModel):
     @field_validator("text")
     @classmethod
     def text_must_be_lowercase_alpha(cls, v: str) -> str:
+        v = v.lower()
         if not ALPHA_RE.match(v):
             raise ValueError("text must contain only lowercase alphabets (a-z)")
         return v
@@ -60,7 +61,11 @@ class ProcessRequest(BaseModel):
     @field_validator("key")
     @classmethod
     def key_must_be_lowercase_alpha(cls, v: Optional[str]) -> Optional[str]:
-        if v is not None and not ALPHA_RE.match(v):
+        if v is None:
+            return v
+
+        v = v.lower()
+        if not ALPHA_RE.match(v):
             raise ValueError("key must contain only lowercase alphabets (a-z)")
         return v
 

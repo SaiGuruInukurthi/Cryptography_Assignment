@@ -19,7 +19,7 @@ const ControlPanel: React.FC<Props> = ({ onSubmit, loading }) => {
   const handleAlphaChange = (
     setter: React.Dispatch<React.SetStateAction<string>>
   ) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const val = e.target.value;
+    const val = e.target.value.toLowerCase();
     if (ALPHA_RE.test(val)) {
       setter(val);
     }
@@ -96,7 +96,7 @@ const ControlPanel: React.FC<Props> = ({ onSubmit, loading }) => {
             target="_blank"
             rel="noreferrer"
           >
-            link to github
+            GitHub Repo
           </a>
         </div>
       </div>
