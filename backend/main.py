@@ -15,7 +15,7 @@ from pydantic import BaseModel, field_validator
 
 import playfair
 import two_columnar
-import sha256_algo
+import sha512_algo
 
 app = FastAPI(title="Crypto Assignment API")
 
@@ -41,7 +41,7 @@ class Mode(str, Enum):
 class Algorithm(str, Enum):
     playfair = "playfair"
     two_columnar = "two_columnar"
-    sha256 = "sha256"
+    sha512 = "sha512"
 
 
 class ProcessRequest(BaseModel):
@@ -90,14 +90,14 @@ def health():
 @app.post("/process", response_model=ProcessResponse)
 def process(req: ProcessRequest):
     try:
-        # SHA-256 — no decryption
-        if req.algorithm == Algorithm.sha256:
+        # SHA-512 — no decryption
+        if req.algorithm == Algorithm.sha512:
             if req.mode == Mode.decrypt:
                 return ProcessResponse(
                     success=False,
-                    error="SHA-256 is a one-way hash and does not support decryption",
+                    error="SHA-512 is a one-way hash and does not support decryption",
                 )
-            output = sha256_algo.hash_text(req.text)
+            output = sha512_algo.hash_text(req.text)
             return ProcessResponse(
                 success=True,
                 algorithm=req.algorithm.value,

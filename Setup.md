@@ -66,14 +66,14 @@ Frontend runs at:
 
 ## 4) How to use the app
 1. Select mode: `encrypt` or `decrypt`
-2. Select algorithm: `playfair`, `two columnar`, or `sha256`
+2. Select algorithm: `playfair`, `two columnar`, or `sha512`
 3. Enter input text
 4. Enter key (required for Playfair and Two Columnar)
 5. Click `run`
 
 Input rules:
 - Only lowercase alphabets (`a-z`) are accepted for text/key inputs.
-- SHA-256 supports only hash mode (decryption is blocked).
+- SHA-512 supports only hash mode (decryption is blocked).
 
 ---
 
@@ -87,7 +87,7 @@ Invoke-RestMethod -Uri http://127.0.0.1:8000/health
 Example process request:
 
 ```powershell
-$body = @{mode="encrypt"; algorithm="sha256"; text="hello"} | ConvertTo-Json
+$body = @{mode="encrypt"; algorithm="sha512"; text="hello"} | ConvertTo-Json
 Invoke-RestMethod -Method Post -Uri http://127.0.0.1:8000/process -Body $body -ContentType "application/json"
 ```
 

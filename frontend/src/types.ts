@@ -1,5 +1,5 @@
 export type Mode = 'encrypt' | 'decrypt';
-export type Algorithm = 'playfair' | 'two_columnar' | 'sha256';
+export type Algorithm = 'playfair' | 'two_columnar' | 'sha512';
 
 export interface ProcessRequest {
   mode: Mode;

@@ -66,7 +66,7 @@ const App: React.FC = () => {
       <div className="app">
         <header className="app-header">
           <h1>{'>'} crypto_terminal <span className="cursor-blink">_</span></h1>
-          <p className="subtitle">playfair · two columnar · sha256</p>
+          <p className="subtitle">playfair · two columnar · sha512</p>
         </header>
 
         <main className="app-main">

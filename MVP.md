@@ -5,7 +5,7 @@ Build a **Minimum Viable Product (MVP)** that demonstrates the working mechanism
 
 1. **Playfair Cipher** (Encrypt + Decrypt)
 2. **Two-Columnar Cipher** (Encrypt + Decrypt)
-3. **SHA-256** (Hash only; no decryption)
+3. **SHA-512** (Hash only; no decryption)
 
 Tech stack:
 - **Backend:** FastAPI (Python)
@@ -21,7 +21,7 @@ Tech stack:
 - User chooses algorithm from dropdown:
   - Playfair Cipher
   - Two Columnar Cipher
-  - SHA-256
+  - SHA-512
 - User provides text input:
   - PT (Plaintext) for encryption
   - CT (Ciphertext) for decryption
@@ -35,9 +35,9 @@ Tech stack:
 - **Two Columnar**:
   - Supports encrypt + decrypt.
   - Requires key (column order or keyword, lowercase alphabets only).
-- **SHA-256**:
+- **SHA-512**:
   - Supports only hashing (one-way).
-  - If user chooses decryption with SHA-256, show a clear validation error message.
+  - If user chooses decryption with SHA-512, show a clear validation error message.
 
 ---
 
@@ -60,7 +60,7 @@ FastAPI backend (/process)
 Algorithm modules (Python)
  ├── playfair.py
  ├── two_columnar.py
- └── sha256_algo.py
+ └── sha512_algo.py
 ```
 
 ### Data flow
@@ -81,7 +81,7 @@ Cryptography_Assignment/
 │   ├── main.py
 │   ├── playfair.py
 │   ├── two_columnar.py
-│   ├── sha256_algo.py
+│   ├── sha512_algo.py
 │   └── requirements.txt
 ├── frontend/
 │   ├── package.json
@@ -141,7 +141,7 @@ Backend default URL: `http://localhost:8000`
 ```json
 {
   "mode": "encrypt | decrypt",
-  "algorithm": "playfair | two_columnar | sha256",
+  "algorithm": "playfair | two_columnar | sha512",
   "text": "string (lowercase a-z only)",
   "key": "optional-string (lowercase a-z only)"
 }
@@ -169,7 +169,7 @@ Backend default URL: `http://localhost:8000`
 ```json
 {
   "success": false,
-  "error": "SHA-256 does not support decryption"
+  "error": "SHA-512 does not support decryption"
 }
 ```
 
@@ -182,9 +182,9 @@ Backend default URL: `http://localhost:8000`
   - call `playfair.encrypt()` or `playfair.decrypt()`
 - If `algorithm == two_columnar`:
   - call `two_columnar.encrypt()` or `two_columnar.decrypt()`
-- If `algorithm == sha256`:
+- If `algorithm == sha512`:
   - allow only `encrypt` mode (hash mode)
-  - call `sha256_algo.hash_text()`
+  - call `sha512_algo.hash_text()`
 
 ---
 
@@ -206,11 +206,11 @@ Backend default URL: `http://localhost:8000`
   - `encrypt(plaintext: str, key: str) -> str`
   - `decrypt(ciphertext: str, key: str) -> str`
 
-## 8.3 `sha256_algo.py`
+## 8.3 `sha512_algo.py`
 - Use Python `hashlib`.
 - Implement:
   - `hash_text(text: str) -> str`
-- Note: SHA-256 output is a hex digest (will contain 0-9 and a-f).
+- Note: SHA-512 output is a hex digest (will contain 0-9 and a-f).
 
 ---
 
@@ -220,7 +220,7 @@ Backend default URL: `http://localhost:8000`
 - Mode selector: Encrypt / Decrypt
 - Algorithm selector (dropdown)
 - Text area for PT/CT
-- Key input (shown for Playfair and Two Columnar; hidden for SHA-256)
+- Key input (shown for Playfair and Two Columnar; hidden for SHA-512)
 - Submit button (`Run`)
 - Output panel (terminal-style)
 
@@ -235,7 +235,7 @@ Backend default URL: `http://localhost:8000`
 ## 9.3 Validation Rules
 - Require non-empty input text.
 - Require key for Playfair and Two Columnar.
-- Block SHA-256 decryption mode in UI (or allow submit and show backend error).
+- Block SHA-512 decryption mode in UI (or allow submit and show backend error).
 
 ## 9.4 Terminal-Style UX — Red & Green Theme
 
@@ -279,7 +279,7 @@ Backend default URL: `http://localhost:8000`
 
 ```ts
 export type Mode = 'encrypt' | 'decrypt';
-export type Algorithm = 'playfair' | 'two_columnar' | 'sha256';
+export type Algorithm = 'playfair' | 'two_columnar' | 'sha512';
 
 export interface ProcessRequest {
   mode: Mode;
@@ -311,7 +311,7 @@ export interface ProcessResponse {
 ### Phase 2 – Algorithms
 4. Implement Playfair cipher module (lowercase throughout).
 5. Implement Two Columnar cipher module (lowercase throughout).
-6. Implement SHA-256 module with `hashlib`.
+6. Implement SHA-512 module with `hashlib`.
 7. Wire modules into `/process` dispatcher.
 
 ### Phase 3 – Frontend
@@ -323,7 +323,7 @@ export interface ProcessResponse {
 
 ### Phase 4 – QA + Demo Readiness
 13. Manual tests for all algorithms and both modes.
-14. Verify invalid flows (missing key, invalid mode for SHA-256, non-alphabetic input rejected).
+14. Verify invalid flows (missing key, invalid mode for SHA-512, non-alphabetic input rejected).
 15. Prepare short demo script.
 
 ---
@@ -333,10 +333,10 @@ export interface ProcessResponse {
 1. **Playfair Encrypt**: valid key + plaintext returns ciphertext.
 2. **Playfair Decrypt**: same key + ciphertext restores normalized plaintext.
 3. **Two Columnar Encrypt/Decrypt**: round trip check.
-4. **SHA-256 Hash**: known input gives deterministic 64-hex output.
+4. **SHA-512 Hash**: known input gives deterministic 128-hex output.
 5. **Validation**: empty text rejected.
 6. **Validation**: missing key rejected for Playfair/Two Columnar.
-7. **Validation**: SHA-256 with decryption returns error.
+7. **Validation**: SHA-512 with decryption returns error.
 8. **Input restriction**: uppercase letters rejected on frontend (filtered) and backend (422).
 9. **Input restriction**: digits / special chars rejected on frontend and backend.
 
@@ -348,15 +348,15 @@ export interface ProcessResponse {
 2. Type invalid characters — show that input field only accepts lowercase letters.
 3. Show Playfair encryption and decryption.
 4. Show Two Columnar encryption and decryption.
-5. Show SHA-256 hashing and explain one-way property.
-6. Trigger one invalid input to demonstrate error handling (e.g., SHA-256 decrypt).
+5. Show SHA-512 hashing and explain one-way property.
+6. Trigger one invalid input to demonstrate error handling (e.g., SHA-512 decrypt).
 
 ---
 
 ## 14) MVP Acceptance Criteria
 - All 3 algorithms integrated and selectable from dropdown.
 - Encrypt/decrypt works where mathematically applicable.
-- SHA-256 hashing works and decryption is blocked gracefully.
+- SHA-512 hashing works and decryption is blocked gracefully.
 - **All text inputs (text + key) restricted to lowercase alphabets (a–z) on both frontend and backend.**
 - **UI uses a red & green terminal color scheme on a dark background.**
 - Backend and frontend run locally without extra tooling.
@@ -375,10 +375,10 @@ export interface ProcessResponse {
 ---
 
 ## 16) Notes / Assumptions
-- For SHA-256, "encrypt" in UI is interpreted as "hash" for user simplicity.
+- For SHA-512, "encrypt" in UI is interpreted as "hash" for user simplicity.
 - Playfair output may include normalization effects (i/j merge, padding letters) — all lowercase.
 - Two Columnar implementation should define and document the exact key interpretation to avoid ambiguity in grading.
-- SHA-256 output is hex (0-9, a-f) — this is the only output that isn't purely a-z.
+- SHA-512 output is hex (0-9, a-f) — this is the only output that isn't purely a-z.
 - Input restriction simplifies algorithm logic (no need to handle mixed-case, numbers, or punctuation).
 
 ---

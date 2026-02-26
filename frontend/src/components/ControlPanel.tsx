@@ -14,7 +14,7 @@ const ControlPanel: React.FC<Props> = ({ onSubmit, loading }) => {
   const [text, setText] = useState('');
   const [key, setKey] = useState('');
 
-  const needsKey = algorithm !== 'sha256';
+  const needsKey = algorithm !== 'sha512';
 
   const handleAlphaChange = (
     setter: React.Dispatch<React.SetStateAction<string>>
@@ -50,7 +50,7 @@ const ControlPanel: React.FC<Props> = ({ onSubmit, loading }) => {
         >
           <option value="playfair">playfair</option>
           <option value="two_columnar">two columnar</option>
-          <option value="sha256">sha256</option>
+          <option value="sha512">sha512</option>
         </select>
       </div>
 
