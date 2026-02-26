@@ -264,6 +264,7 @@ button[type='submit']:disabled {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  min-height: 0;
 }
 
 .terminal-header {
@@ -278,7 +279,7 @@ button[type='submit']:disabled {
   padding: 12px;
   flex: 1;
   overflow-y: auto;
-  max-height: 60vh;
+  min-height: 0;
 }
 
 .terminal-actions {
