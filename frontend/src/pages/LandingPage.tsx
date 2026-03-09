@@ -75,10 +75,13 @@ const LandingPage: React.FC = () => {
         >
           {'>'} Launch Terminal
         </button>
+        <a className="scroll-hint" href="#algorithms">
+          scroll down for more details
+        </a>
       </section>
 
       {/* ── Algorithms ─────────────────────────── */}
-      <section className="landing-section">
+      <section className="landing-section" id="algorithms">
         <h2 className="section-heading">
           <span className="section-prompt">#</span> Algorithms
         </h2>
@@ -94,7 +97,7 @@ const LandingPage: React.FC = () => {
       </section>
 
       {/* ── About ──────────────────────────────── */}
-      <section className="landing-section">
+      <section className="landing-section" id="about">
         <h2 className="section-heading">
           <span className="section-prompt">#</span> About
         </h2>

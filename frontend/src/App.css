@@ -31,6 +31,10 @@ body {
   min-height: 100vh;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 #root {
   min-height: 100vh;
 }
@@ -511,12 +515,14 @@ button[type='submit']:disabled {
 /* ── Hero ─────────────────────────────────────── */
 
 .landing-hero {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 120px 0 80px;
+  min-height: 100vh;
+  padding: 48px 0 96px;
   gap: 18px;
 }
 
@@ -577,6 +583,26 @@ button[type='submit']:disabled {
 
 .hero-cta:active {
   transform: translateY(0);
+}
+
+.scroll-hint {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--green-dim);
+  text-decoration: none;
+  font-size: 0.8rem;
+  text-transform: lowercase;
+  letter-spacing: 0.03em;
+  border-bottom: 1px dashed var(--green-dark);
+  padding-bottom: 3px;
+  opacity: 0.9;
+}
+
+.scroll-hint:hover {
+  color: var(--green);
+  border-bottom-color: var(--green);
 }
 
 /* ── Sections ─────────────────────────────────── */
@@ -648,7 +674,13 @@ button[type='submit']:disabled {
   }
 
   .landing-hero {
-    padding: 72px 0 48px;
+    min-height: 100svh;
+    padding: 24px 0 88px;
+  }
+
+  .scroll-hint {
+    bottom: 20px;
+    font-size: 0.74rem;
   }
 }
 

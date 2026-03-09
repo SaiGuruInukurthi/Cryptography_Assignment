@@ -199,10 +199,6 @@ const TerminalPage: React.FC = () => {
           <Link to="/" className="back-link">
             {'<'} back
           </Link>
-          <h1>
-            {'>'} crypto_terminal <span className="cursor-blink">_</span>
-          </h1>
-          <p className="subtitle">playfair · two columnar · sha512</p>
         </header>
 
         <main className="app-main">
