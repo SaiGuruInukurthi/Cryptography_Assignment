@@ -266,6 +266,52 @@ button[type='submit']:disabled {
   box-shadow: 0 0 4px rgba(0, 255, 65, 0.2);
 }
 
+/* ── Two-columnar visual ──────────────────────── */
+
+.columnar-visual-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.columnar-meta {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.columnar-grid {
+  border-collapse: collapse;
+}
+
+.columnar-hdr {
+  color: var(--green-dim) !important;
+  background: #0f1710 !important;
+}
+
+.columnar-rank {
+  color: #9effb7 !important;
+  background: #132113 !important;
+  font-size: 0.75rem !important;
+}
+
+.columnar-output {
+  text-align: center;
+  width: 100%;
+  word-break: break-all;
+}
+
+.columnar-pass-label {
+  width: 100%;
+  text-align: center;
+  margin-top: 4px;
+  color: var(--green-dim) !important;
+  font-size: 0.85rem !important;
+}
+
 .form-actions {
   display: flex;
   gap: 8px;

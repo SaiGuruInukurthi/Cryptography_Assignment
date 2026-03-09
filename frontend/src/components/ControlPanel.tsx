@@ -58,6 +58,89 @@ const buildPlayfairPreview = (value: string): string => {
   return pairs.join(' ');
 };
 
+interface ColumnarVisual {
+  keyChars: string[];
+  columnOrder: number[];
+  rankByCol: number[];
+  grid1: string[][];
+  pass1Output: string;
+  grid2: string[][];
+  pass2Output: string;
+}
+
+const singleColumnarEncrypt = (
+  text: string,
+  ncols: number,
+  columnOrder: number[]
+): { grid: string[][]; output: string } => {
+  const nrows = Math.ceil(text.length / ncols);
+  const padded = text.padEnd(nrows * ncols, 'x');
+  const grid = Array.from({ length: nrows }, (_, r) =>
+    padded.slice(r * ncols, r * ncols + ncols).split('')
+  );
+  const out: string[] = [];
+  for (const col of columnOrder) {
+    for (let r = 0; r < nrows; r++) out.push(grid[r][col]);
+  }
+  return { grid, output: out.join('') };
+};
+
+const singleColumnarDecrypt = (
+  text: string,
+  ncols: number,
+  columnOrder: number[]
+): { grid: string[][]; output: string } => {
+  const nrows = Math.ceil(text.length / ncols);
+  const padded = text.padEnd(nrows * ncols, 'x');
+  const grid: string[][] = Array.from({ length: nrows }, () =>
+    Array.from({ length: ncols }, () => '')
+  );
+  let idx = 0;
+  for (const col of columnOrder) {
+    for (let r = 0; r < nrows; r++) {
+      grid[r][col] = padded[idx] || 'x';
+      idx++;
+    }
+  }
+  return { grid, output: grid.flat().join('') };
+};
+
+const buildColumnarVisual = (
+  text: string,
+  key: string,
+  mode: string
+): ColumnarVisual | null => {
+  const k = key.toLowerCase().replace(/[^a-z]/g, '');
+  if (!k) return null;
+
+  const keyChars = k.split('');
+  const ncols = keyChars.length;
+
+  const columnOrder = keyChars
+    .map((ch, i) => ({ ch, i }))
+    .sort((a, b) => a.ch.localeCompare(b.ch))
+    .map((e) => e.i);
+
+  const rankByCol = new Array<number>(ncols);
+  columnOrder.forEach((col, rank) => {
+    rankByCol[col] = rank + 1;
+  });
+
+  if (!text) {
+    return { keyChars, columnOrder, rankByCol, grid1: [], pass1Output: '', grid2: [], pass2Output: '' };
+  }
+
+  if (mode === 'encrypt') {
+    const p1 = singleColumnarEncrypt(text, ncols, columnOrder);
+    const p2 = singleColumnarEncrypt(p1.output, ncols, columnOrder);
+    return { keyChars, columnOrder, rankByCol, grid1: p1.grid, pass1Output: p1.output, grid2: p2.grid, pass2Output: p2.output };
+  } else {
+    const p1 = singleColumnarDecrypt(text, ncols, columnOrder);
+    const p2 = singleColumnarDecrypt(p1.output, ncols, columnOrder);
+    return { keyChars, columnOrder, rankByCol, grid1: p1.grid, pass1Output: p1.output, grid2: p2.grid, pass2Output: p2.output };
+  }
+};
+
 const ControlPanel: React.FC<Props> = ({ onSubmit, loading }) => {
   const [mode, setMode] = useState<Mode>('encrypt');
   const [algorithm, setAlgorithm] = useState<Algorithm>('playfair');
@@ -69,6 +152,8 @@ const ControlPanel: React.FC<Props> = ({ onSubmit, loading }) => {
     algorithm === 'playfair' && mode === 'encrypt' && text
       ? buildPlayfairPreview(text)
       : '';
+  const columnarVisual =
+    algorithm === 'two_columnar' ? buildColumnarVisual(text, key, mode) : null;
 
   const handleAlphaChange = (
     setter: React.Dispatch<React.SetStateAction<string>>
@@ -158,6 +243,90 @@ const ControlPanel: React.FC<Props> = ({ onSubmit, loading }) => {
               ))}
             </tbody>
           </table>
+        </div>
+      )}
+
+      {algorithm === 'two_columnar' && (
+        <div className="columnar-visual-container">
+          <label className="key-matrix-label">&gt; transposition grids</label>
+          {columnarVisual ? (
+            <>
+              <div className="columnar-meta">
+                <span className="hint preprocess-hint">
+                  key: {columnarVisual.keyChars.join(' ')}
+                </span>
+                <span className="hint preprocess-hint">
+                  read order: {columnarVisual.columnOrder.map((c) => c + 1).join(' → ')}
+                </span>
+              </div>
+
+              {columnarVisual.grid1.length > 0 && (
+                <>
+                  <span className="hint preprocess-hint columnar-pass-label">
+                    {mode === 'encrypt' ? '─ pass 1 (input → grid)' : '─ pass 1 (ciphertext → grid)'}
+                  </span>
+                  <table className="key-matrix columnar-grid">
+                    <thead>
+                      <tr>
+                        {columnarVisual.keyChars.map((ch, i) => (
+                          <th key={'k1' + i} className="key-matrix-cell columnar-hdr">{ch}</th>
+                        ))}
+                      </tr>
+                      <tr>
+                        {columnarVisual.rankByCol.map((rank, i) => (
+                          <th key={'r1' + i} className="key-matrix-cell columnar-rank">{rank}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {columnarVisual.grid1.map((row, r) => (
+                        <tr key={r}>
+                          {row.map((ch, c) => (
+                            <td key={c} className="key-matrix-cell">{ch}</td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  <span className="hint preprocess-hint columnar-output">
+                    {mode === 'encrypt' ? 'pass-1 output' : 'pass-1 recovery'}: {columnarVisual.pass1Output}
+                  </span>
+
+                  <span className="hint preprocess-hint columnar-pass-label">
+                    {mode === 'encrypt' ? '─ pass 2 (pass-1 output → grid)' : '─ pass 2 (pass-1 recovery → grid)'}
+                  </span>
+                  <table className="key-matrix columnar-grid">
+                    <thead>
+                      <tr>
+                        {columnarVisual.keyChars.map((ch, i) => (
+                          <th key={'k2' + i} className="key-matrix-cell columnar-hdr">{ch}</th>
+                        ))}
+                      </tr>
+                      <tr>
+                        {columnarVisual.rankByCol.map((rank, i) => (
+                          <th key={'r2' + i} className="key-matrix-cell columnar-rank">{rank}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {columnarVisual.grid2.map((row, r) => (
+                        <tr key={'p2r' + r}>
+                          {row.map((ch, c) => (
+                            <td key={c} className="key-matrix-cell">{ch}</td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  <span className="hint preprocess-hint columnar-output">
+                    {mode === 'encrypt' ? 'final ciphertext' : 'recovered plaintext'}: {columnarVisual.pass2Output}
+                  </span>
+                </>
+              )}
+            </>
+          ) : (
+            <span className="hint preprocess-hint">enter a key to see the transposition grids</span>
+          )}
         </div>
       )}
 
