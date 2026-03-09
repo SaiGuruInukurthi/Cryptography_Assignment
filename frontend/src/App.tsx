@@ -7,14 +7,15 @@ import { Mode, Algorithm, ProcessResponse } from './types';
 import './App.css';
 
 const EASTER_EGG_VIDEO_ID = 'hf1DkBQRQj4';
-const IDLE_TIMEOUT_MS = 10 * 1000;   // 3 minutes
-const RETURN_TIMEOUT_MS = 45 * 1000;  // 1 minute
+const IDLE_TIMEOUT_MS = 3 * 60 * 1000;   // 3 minutes
+const RETURN_TIMEOUT_MS = 37 * 1000;  //37 sec
 
 const App: React.FC = () => {
   const [history, setHistory] = useState<ProcessResponse[]>([]);
   const [loading, setLoading] = useState(false);
   const [showEasterEgg, setShowEasterEgg] = useState(false);
   const easterEggIframeRef = useRef<HTMLIFrameElement | null>(null);
+  const easterEggOverlayRef = useRef<HTMLDivElement | null>(null);
 
   const sendPlayerCommand = (func: string, args: unknown[] = []) => {
     const iframe = easterEggIframeRef.current;
@@ -43,6 +44,23 @@ const App: React.FC = () => {
     }, IDLE_TIMEOUT_MS);
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    if (!showEasterEgg) {
+      if (document.fullscreenElement) {
+        void document.exitFullscreen();
+      }
+      return;
+    }
+
+    // Browser may reject this without a fresh user gesture.
+    const overlay = easterEggOverlayRef.current;
+    if (overlay && !document.fullscreenElement) {
+      void overlay.requestFullscreen().catch(() => {
+        // No-op fallback: fixed overlay still covers viewport.
+      });
+    }
+  }, [showEasterEgg]);
 
   const handleSubmit = async (
     mode: Mode,
@@ -82,6 +100,7 @@ const App: React.FC = () => {
     <div className="app-shell">
       {showEasterEgg && (
         <div
+          ref={easterEggOverlayRef}
           style={{
             position: 'fixed',
             top: 0,
@@ -101,8 +120,17 @@ const App: React.FC = () => {
             frameBorder="0"
             allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
             allowFullScreen
-            style={{ border: 'none' }}
+            style={{ border: 'none', pointerEvents: 'none' }}
             onLoad={handleEasterEggLoad}
+          />
+          <div
+            aria-hidden="true"
+            style={{
+              position: 'absolute',
+              inset: 0,
+              background: 'transparent',
+              zIndex: 100000,
+            }}
           />
         </div>
       )}
