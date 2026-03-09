@@ -126,8 +126,8 @@ body {
 }
 
 .student-line {
-  font-size: 0.78rem;
-  color: var(--text-dim);
+  font-size: 1rem;
+  color: var(--green);
   line-height: 1.4;
   word-break: break-all;
 }
@@ -170,12 +170,12 @@ body {
 }
 
 .field .hint {
-  font-size: 0.7rem;
-  color: var(--text-dim);
+  font-size: 1rem;
+  color: var(--green);
 }
 
 .preprocess-hint {
-  color: var(--green-dim);
+  color: var(--green);
   word-break: break-word;
 }
 
