@@ -71,7 +71,9 @@ const App: React.FC = () => {
 
         <main className="app-main">
           <ControlPanel onSubmit={handleSubmit} loading={loading} />
-          <TerminalOutput history={history} onClear={handleClearOutputs} />
+          <div className="output-wrapper">
+            <TerminalOutput history={history} onClear={handleClearOutputs} />
+          </div>
         </main>
 
         <footer className="app-footer">

@@ -89,6 +89,10 @@ body {
   .app-main {
     grid-template-columns: 1fr;
   }
+  .output-wrapper {
+    position: relative;
+    min-height: 400px;
+  }
 }
 
 .app-footer {
@@ -339,7 +343,14 @@ button[type='submit']:disabled {
 
 /* ── Terminal output ─────────────────────────── */
 
+.output-wrapper {
+  position: relative;
+  min-height: 300px;
+}
+
 .terminal-output {
+  position: absolute;
+  inset: 0;
   background: rgba(10, 10, 10, 0.86);
   backdrop-filter: blur(2px);
   border: 1px solid var(--green-dark);
@@ -347,7 +358,6 @@ button[type='submit']:disabled {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  min-height: 660px;
 }
 
 .terminal-header {
