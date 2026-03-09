@@ -7,13 +7,14 @@ import { Mode, Algorithm, ProcessResponse } from './types';
 import './App.css';
 
 const EASTER_EGG_VIDEO_ID = 'hf1DkBQRQj4';
-const IDLE_TIMEOUT_MS = 3 * 60 * 1000;   // 3 minutes
+const IDLE_TIMEOUT_MS = 10 * 1000;   // 3 minutes
 const RETURN_TIMEOUT_MS = 37 * 1000;  //37 sec
+const MESSAGE_DISPLAY_MS = 10 * 1000;
 
 const App: React.FC = () => {
   const [history, setHistory] = useState<ProcessResponse[]>([]);
   const [loading, setLoading] = useState(false);
-  const [showEasterEgg, setShowEasterEgg] = useState(false);
+  const [easterEggStage, setEasterEggStage] = useState<'video' | 'message' | null>(null);
   const easterEggIframeRef = useRef<HTMLIFrameElement | null>(null);
   const easterEggOverlayRef = useRef<HTMLDivElement | null>(null);
 
@@ -38,15 +39,32 @@ const App: React.FC = () => {
   };
 
   useEffect(() => {
+    let showMessageTimer: ReturnType<typeof setTimeout> | undefined;
+    let hideOverlayTimer: ReturnType<typeof setTimeout> | undefined;
+
     const timer = setTimeout(() => {
-      setShowEasterEgg(true);
-      setTimeout(() => setShowEasterEgg(false), RETURN_TIMEOUT_MS);
+      setEasterEggStage('video');
+      showMessageTimer = setTimeout(() => {
+        setEasterEggStage('message');
+      }, RETURN_TIMEOUT_MS);
+      hideOverlayTimer = setTimeout(() => {
+        setEasterEggStage(null);
+      }, RETURN_TIMEOUT_MS + MESSAGE_DISPLAY_MS);
     }, IDLE_TIMEOUT_MS);
-    return () => clearTimeout(timer);
+
+    return () => {
+      clearTimeout(timer);
+      if (showMessageTimer) {
+        clearTimeout(showMessageTimer);
+      }
+      if (hideOverlayTimer) {
+        clearTimeout(hideOverlayTimer);
+      }
+    };
   }, []);
 
   useEffect(() => {
-    if (!showEasterEgg) {
+    if (!easterEggStage) {
       if (document.fullscreenElement) {
         void document.exitFullscreen();
       }
@@ -60,7 +78,7 @@ const App: React.FC = () => {
         // No-op fallback: fixed overlay still covers viewport.
       });
     }
-  }, [showEasterEgg]);
+  }, [easterEggStage]);
 
   const handleSubmit = async (
     mode: Mode,
@@ -98,7 +116,7 @@ const App: React.FC = () => {
 
   return (
     <div className="app-shell">
-      {showEasterEgg && (
+      {easterEggStage && (
         <div
           ref={easterEggOverlayRef}
           style={{
@@ -108,30 +126,71 @@ const App: React.FC = () => {
             width: '100vw',
             height: '100vh',
             zIndex: 99999,
-            background: '#000',
+            background: easterEggStage === 'video' ? '#000' : 'rgba(0, 0, 0, 0.82)',
           }}
         >
-          <iframe
-            ref={easterEggIframeRef}
-            width="100%"
-            height="100%"
-            src={`https://www.youtube.com/embed/${EASTER_EGG_VIDEO_ID}?autoplay=1&mute=1&playsinline=1&controls=0&modestbranding=1&rel=0&enablejsapi=1`}
-            title="Easter Egg"
-            frameBorder="0"
-            allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
-            allowFullScreen
-            style={{ border: 'none', pointerEvents: 'none' }}
-            onLoad={handleEasterEggLoad}
-          />
-          <div
-            aria-hidden="true"
-            style={{
-              position: 'absolute',
-              inset: 0,
-              background: 'transparent',
-              zIndex: 100000,
-            }}
-          />
+          {easterEggStage === 'video' ? (
+            <>
+              <iframe
+                ref={easterEggIframeRef}
+                width="100%"
+                height="100%"
+                src={`https://www.youtube.com/embed/${EASTER_EGG_VIDEO_ID}?autoplay=1&mute=1&playsinline=1&controls=0&modestbranding=1&rel=0&enablejsapi=1`}
+                title="Easter Egg"
+                frameBorder="0"
+                allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
+                allowFullScreen
+                style={{ border: 'none', pointerEvents: 'none' }}
+                onLoad={handleEasterEggLoad}
+              />
+              <div
+                aria-hidden="true"
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  background: 'transparent',
+                  zIndex: 100000,
+                }}
+              />
+            </>
+          ) : (
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                textAlign: 'center',
+                padding: '24px',
+                gap: '16px',
+              }}
+            >
+              <h2
+                style={{
+                  color: '#ff3a3a',
+                  fontSize: 'clamp(1.3rem, 3vw, 2.4rem)',
+                  margin: 0,
+                  maxWidth: '900px',
+                  lineHeight: 1.25,
+                }}
+              >
+                Thank you for your patience and spending time on a student assignment project
+              </h2>
+              <p
+                style={{
+                  color: '#36ff61',
+                  fontSize: 'clamp(0.85rem, 1.8vw, 1.2rem)',
+                  margin: 0,
+                  maxWidth: '900px',
+                  lineHeight: 1.35,
+                }}
+              >
+                {'{'}This is an easter egg, <strong>congrats</strong> for discovering it{'}'}
+              </p>
+            </div>
+          )}
         </div>
       )}
       <div className="app-bg" aria-hidden="true">
