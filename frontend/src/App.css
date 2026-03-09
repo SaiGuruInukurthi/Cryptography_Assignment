@@ -82,7 +82,7 @@ body {
   grid-template-columns: 1fr 1fr;
   gap: 20px;
   flex: 1;
-  align-items: start;
+  align-items: stretch;
 }
 
 @media (max-width: 700px) {
@@ -349,9 +349,7 @@ button[type='submit']:disabled {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  height: 660px;
   min-height: 660px;
-  max-height: 660px;
 }
 
 .terminal-header {
