@@ -318,9 +318,6 @@ const ControlPanel: React.FC<Props> = ({ onSubmit, loading }) => {
                       ))}
                     </tbody>
                   </table>
-                  <span className="hint preprocess-hint columnar-output">
-                    {mode === 'encrypt' ? 'final ciphertext' : 'recovered plaintext'}: {columnarVisual.pass2Output}
-                  </span>
                 </>
               )}
             </>
