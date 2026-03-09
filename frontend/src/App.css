@@ -108,11 +108,9 @@ body {
   display: flex;
   flex-direction: column;
   gap: 14px;
-  min-height: 660px;
 }
 
 .student-meta-row {
-  margin-top: auto;
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
