@@ -229,6 +229,43 @@ button[type='submit']:disabled {
   cursor: not-allowed;
 }
 
+/* ── Playfair key matrix ──────────────────────── */
+
+.key-matrix-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.key-matrix-label {
+  font-size: 0.85rem;
+  color: var(--green-dim);
+  align-self: flex-start;
+}
+
+.key-matrix {
+  border-collapse: collapse;
+}
+
+.key-matrix-cell {
+  width: 38px;
+  height: 34px;
+  text-align: center;
+  vertical-align: middle;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--green);
+  border: 1px solid var(--green-dark);
+  background: #111;
+  transition: background 0.15s, color 0.15s;
+}
+
+.key-matrix-cell:hover {
+  background: #1a2e1a;
+  box-shadow: 0 0 4px rgba(0, 255, 65, 0.2);
+}
+
 .form-actions {
   display: flex;
   gap: 8px;

@@ -8,6 +8,30 @@ interface Props {
 
 const ALPHA_RE = /^[a-z]*$/;
 
+const buildKeyMatrix = (key: string): string[][] => {
+  const normalized = key.toLowerCase().replace(/[^a-z]/g, '').replace(/j/g, 'i');
+  const seen = new Set<string>();
+  const ordered: string[] = [];
+  for (const ch of normalized) {
+    if (!seen.has(ch)) {
+      seen.add(ch);
+      ordered.push(ch);
+    }
+  }
+  const alphabet = 'abcdefghiklmnopqrstuvwxyz'; // no j
+  for (const ch of alphabet) {
+    if (!seen.has(ch)) {
+      seen.add(ch);
+      ordered.push(ch);
+    }
+  }
+  const matrix: string[][] = [];
+  for (let i = 0; i < 5; i++) {
+    matrix.push(ordered.slice(i * 5, i * 5 + 5));
+  }
+  return matrix;
+};
+
 const buildPlayfairPreview = (value: string): string => {
   const normalized = value.toLowerCase().replace(/[^a-z]/g, '').replace(/j/g, 'i');
   const pairs: string[] = [];
@@ -117,6 +141,25 @@ const ControlPanel: React.FC<Props> = ({ onSubmit, loading }) => {
           <span className="hint preprocess-hint">digraphs: {playfairPreview}</span>
         )}
       </div>
+
+      {algorithm === 'playfair' && (
+        <div className="key-matrix-container">
+          <label className="key-matrix-label">&gt; key matrix</label>
+          <table className="key-matrix">
+            <tbody>
+              {buildKeyMatrix(key).map((row, r) => (
+                <tr key={r}>
+                  {row.map((ch, c) => (
+                    <td key={c} className="key-matrix-cell">
+                      {ch === 'i' ? 'i/j' : ch}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
 
       <div className="form-actions">
         <button type="submit" disabled={loading || !text || (needsKey && !key)}>
