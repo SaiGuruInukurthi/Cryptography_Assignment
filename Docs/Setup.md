@@ -43,6 +43,13 @@ Start backend server:
 ```bash
 uvicorn main:app --reload --port 8000
 ```
+Quick set-up for restarts:
+
+```bash
+cd backend
+conda activate crypto
+uvicorn main:app --reload --port 8000
+```
 
 Backend runs at:
 - `http://127.0.0.1:8000`
