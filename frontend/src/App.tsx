@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ControlPanel from './components/ControlPanel';
 import TerminalOutput from './components/TerminalOutput';
 import PixelSnow from './components/PixelSnow';
@@ -6,9 +6,43 @@ import { processRequest } from './api';
 import { Mode, Algorithm, ProcessResponse } from './types';
 import './App.css';
 
+const EASTER_EGG_VIDEO_ID = 'hf1DkBQRQj4';
+const IDLE_TIMEOUT_MS = 10 * 1000;   // 3 minutes
+const RETURN_TIMEOUT_MS = 45 * 1000;  // 1 minute
+
 const App: React.FC = () => {
   const [history, setHistory] = useState<ProcessResponse[]>([]);
   const [loading, setLoading] = useState(false);
+  const [showEasterEgg, setShowEasterEgg] = useState(false);
+  const easterEggIframeRef = useRef<HTMLIFrameElement | null>(null);
+
+  const sendPlayerCommand = (func: string, args: unknown[] = []) => {
+    const iframe = easterEggIframeRef.current;
+    if (!iframe?.contentWindow) {
+      return;
+    }
+
+    iframe.contentWindow.postMessage(
+      JSON.stringify({ event: 'command', func, args }),
+      '*'
+    );
+  };
+
+  const handleEasterEggLoad = () => {
+    // Autoplay begins muted; attempt unmute two seconds later.
+    setTimeout(() => {
+      sendPlayerCommand('unMute');
+      sendPlayerCommand('setVolume', [100]);
+    }, 2000);
+  };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowEasterEgg(true);
+      setTimeout(() => setShowEasterEgg(false), RETURN_TIMEOUT_MS);
+    }, IDLE_TIMEOUT_MS);
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleSubmit = async (
     mode: Mode,
@@ -46,6 +80,32 @@ const App: React.FC = () => {
 
   return (
     <div className="app-shell">
+      {showEasterEgg && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: '100vh',
+            zIndex: 99999,
+            background: '#000',
+          }}
+        >
+          <iframe
+            ref={easterEggIframeRef}
+            width="100%"
+            height="100%"
+            src={`https://www.youtube.com/embed/${EASTER_EGG_VIDEO_ID}?autoplay=1&mute=1&playsinline=1&controls=0&modestbranding=1&rel=0&enablejsapi=1`}
+            title="Easter Egg"
+            frameBorder="0"
+            allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
+            allowFullScreen
+            style={{ border: 'none' }}
+            onLoad={handleEasterEggLoad}
+          />
+        </div>
+      )}
       <div className="app-bg" aria-hidden="true">
         <PixelSnow
           color="#00ff41"
