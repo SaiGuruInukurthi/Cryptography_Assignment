@@ -47,3 +47,8 @@ frontend/pnpm-debug.log*
 .env
 .env.*
 !.env.example
+
+# -----------------------------
+# Local helper scripts
+# -----------------------------
+deploy.local.bat
