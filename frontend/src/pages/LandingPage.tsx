@@ -103,10 +103,10 @@ const LandingPage: React.FC = () => {
         </div>
       </section>
 
-      {/* ── About ──────────────────────────────── */}
+      {/* ── About Contributors──────────────────────────────── */}
       <section className="landing-section" id="about">
         <h2 className="section-heading">
-          <span className="section-prompt">#</span> About
+          <span className="section-prompt">#</span> About Contributors
         </h2>
         <div className="about-grid">
           {TEAMMATES.map((member) => (
@@ -138,7 +138,7 @@ const LandingPage: React.FC = () => {
 
       <footer className="app-footer">
         <span className="dim">
-          Built as an internship case study on February 2026
+          Built as an internship case study on March 2026
         </span>
       </footer>
     </div>
