@@ -686,6 +686,13 @@ button[type='submit']:disabled {
 
 /* ── About card ───────────────────────────────── */
 
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 16px;
+  width: min(980px, 100%);
+}
+
 .about-card {
   background: rgba(10, 10, 10, 0.82);
   border: 1px solid var(--green-dark);
@@ -694,7 +701,7 @@ button[type='submit']:disabled {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  max-width: 420px;
+  max-width: 100%;
 }
 
 .about-line {

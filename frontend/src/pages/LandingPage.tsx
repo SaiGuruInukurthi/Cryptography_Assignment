@@ -50,6 +50,13 @@ const ALGORITHMS = [
   },
 ];
 
+const TEAMMATES = [
+  { name: 'Inukurthi Sri Venkata Sai Guru', roll: '2023003611' },
+  { name: 'B Vishwajanani', roll: '2023001493' },
+  { name: 'K Akhila Varma', roll: '2023003717' },
+  { name: 'Varsha Sathya Narayana', roll: '202001431' },
+];
+
 const LandingPage: React.FC = () => {
   const navigate = useNavigate();
 
@@ -57,7 +64,7 @@ const LandingPage: React.FC = () => {
     <div className="landing">
       {/* ── Hero ───────────────────────────────── */}
       <section className="landing-hero">
-        <div className="hero-badge">cryptography assignment · sem 6</div>
+        <div className="hero-badge">internship case study · sem 6</div>
         <h1 className="hero-title">
           <span className="hero-prompt">{'>'}</span> crypto_terminal{' '}
           <span className="cursor-blink">_</span>
@@ -66,7 +73,7 @@ const LandingPage: React.FC = () => {
           Encrypt. Decrypt. Hash.
           <br />
           <span className="hero-tagline-dim">
-            A cryptography toolkit built for learning.
+            Internship case study for practical secure-systems learning.
           </span>
         </p>
         <button
@@ -101,51 +108,37 @@ const LandingPage: React.FC = () => {
         <h2 className="section-heading">
           <span className="section-prompt">#</span> About
         </h2>
-        <div className="about-card">
-          <div className="about-line">
-            <span className="about-key">name</span>
-            <span className="about-sep">:</span>
-            <span className="about-val">I. Sai Guru</span>
-          </div>
-          <div className="about-line">
-            <span className="about-key">roll</span>
-            <span className="about-sep">:</span>
-            <span className="about-val">2023003611</span>
-          </div>
-          <div className="about-line">
-            <span className="about-key">course</span>
-            <span className="about-sep">:</span>
-            <span className="about-val">Cryptography &amp; Network Security</span>
-          </div>
-          <div className="about-line">
-            <span className="about-key">semester</span>
-            <span className="about-sep">:</span>
-            <span className="about-val">6</span>
-          </div>
-          <div className="about-links">
-            <a
-              href="https://github.com/SaiGuruInukurthi"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="about-link"
-            >
-              github ↗
-            </a>
-            <a
-              href="https://www.linkedin.com/in/inukurthisaiguru/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="about-link"
-            >
-              linkedin ↗
-            </a>
-          </div>
+        <div className="about-grid">
+          {TEAMMATES.map((member) => (
+            <div className="about-card" key={member.roll}>
+              <div className="about-line">
+                <span className="about-key">name</span>
+                <span className="about-sep">:</span>
+                <span className="about-val">{member.name}</span>
+              </div>
+              <div className="about-line">
+                <span className="about-key">roll</span>
+                <span className="about-sep">:</span>
+                <span className="about-val">{member.roll}</span>
+              </div>
+              <div className="about-line">
+                <span className="about-key">course</span>
+                <span className="about-sep">:</span>
+                <span className="about-val">Internship course</span>
+              </div>
+              <div className="about-line">
+                <span className="about-key">semester</span>
+                <span className="about-sep">:</span>
+                <span className="about-val">6</span>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
       <footer className="app-footer">
         <span className="dim">
-          Made this for my cryptography assignment on February 2026
+          Built as an internship case study on February 2026
         </span>
       </footer>
     </div>

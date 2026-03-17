@@ -174,8 +174,8 @@ const TerminalPage: React.FC = () => {
                   lineHeight: 1.25,
                 }}
               >
-                Thank you for your patience and spending time on a student
-                assignment project
+                Thank you for your patience and spending time on this
+                internship case study project
               </h2>
               <p
                 style={{
@@ -210,7 +210,7 @@ const TerminalPage: React.FC = () => {
 
         <footer className="app-footer">
           <span className="dim">
-            Made this for my cryptography assignment on February 2026
+            Built as an internship case study on February 2026
           </span>
         </footer>
       </div>
