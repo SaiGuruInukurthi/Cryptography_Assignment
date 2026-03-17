@@ -210,7 +210,7 @@ const TerminalPage: React.FC = () => {
 
         <footer className="app-footer">
           <span className="dim">
-            Built as an internship case study on February 2026
+            Built as an internship case study on March 2026
           </span>
         </footer>
       </div>
