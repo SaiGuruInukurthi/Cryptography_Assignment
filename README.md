@@ -1,6 +1,6 @@
-# Cryptography Assignment
+# Crypto Terminal: Internship Case Study
 
-A full-stack cryptography demo application with a terminal-style interface.
+A full-stack cryptography demo application with a terminal-style interface, presented as an internship case study.
 
 This project showcases three classical/modern cryptographic workflows through a single web UI:
 - Playfair Cipher (encrypt/decrypt)
@@ -11,9 +11,9 @@ The system is split into:
 - A Python FastAPI backend for validation and algorithm processing
 - A React + TypeScript frontend for interactive usage
 
-## Why This Project
+## Why This Case Study
 
-This repository is designed as an educational MVP for understanding how different crypto techniques behave in practice:
+This repository is designed as an internship-focused case study for understanding how different crypto techniques behave in practice:
 - Substitution cipher behavior (Playfair)
 - Transposition cipher behavior (Double Columnar)
 - One-way cryptographic hashing (SHA-512)
@@ -60,6 +60,7 @@ Cryptography_Assignment/
 |-- stop.bat
 |-- deploy.local.bat
 |-- Docs/
+|   |-- Comprehensive_Documentation.md
 |   |-- Algos.md
 |   |-- Deployment.md
 |   |-- MVP.md
@@ -220,10 +221,21 @@ Then redeploy frontend.
 ## Documentation
 
 Detailed guides are available in the `Docs/` folder:
+- `Docs/Comprehensive_Documentation.md` for end-to-end technical and operational documentation
 - `Docs/Setup.md` for local run instructions and ngrok/mobile testing
 - `Docs/Deployment.md` for Vercel production deploy workflow
 - `Docs/Algos.md` for algorithm-level implementation details
 - `Docs/MVP.md` for original scope and architecture plan
+
+## Team
+
+- Inukurthi Sri Venkata Sai Guru - 2023003611
+- B Vishwajanani - 2023001493
+- K Akhila Varma - 2023003717
+- Varsha Sathya Narayana - 202001431
+
+Course: Internship course  
+Semester: 6
 
 ## Future Improvements
 
@@ -234,4 +246,4 @@ Detailed guides are available in the `Docs/` folder:
 
 ## License
 
-This project is intended for educational use within the Cryptography assignment context.
+This project is intended for educational and internship case-study use.
