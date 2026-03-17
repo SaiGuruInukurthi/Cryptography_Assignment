@@ -32,55 +32,24 @@ It focuses on clarity, predictable input/output, and deployment-ready structure.
 ## Tech Stack
 
 ### Frontend Stack
-- Runtime and framework:
-  - React `18.2.0`
-  - React DOM `18.2.0`
-  - TypeScript `5.9.3`
-- Routing and API:
-  - React Router DOM `6.30.3`
-  - Axios `1.6.0`
-- Visualization and UI effects:
-  - Three.js `0.183.1`
-  - `@types/three` `0.183.1`
-- Build toolchain:
-  - react-scripts `5.0.1` (Create React App)
-  - web-vitals `2.1.4`
-  - `@types/react` `18.2.0`
-  - `@types/react-dom` `18.2.0`
-- Package manager and scripts:
-  - npm
-  - `npm start` for development
-  - `npm run build` for production build
+- Runtime and framework: React `18.2.0`, React DOM `18.2.0`, TypeScript `5.9.3`
+- Routing and API: React Router DOM `6.30.3`, Axios `1.6.0`
+- Visualization and UI effects: Three.js `0.183.1`, `@types/three` `0.183.1`
+- Build toolchain: react-scripts `5.0.1` (Create React App), web-vitals `2.1.4`, `@types/react` `18.2.0`, `@types/react-dom` `18.2.0`
+- Package manager and scripts: npm, `npm start`, `npm run build`
 
 ### Backend Stack
-- Runtime:
-  - Python `3.11`
-  - Conda environment: `crypto` (recommended)
-- Web API framework:
-  - FastAPI
-- ASGI server:
-  - Uvicorn
-- Data validation and request modeling:
-  - Pydantic
-- Standard library usage:
-  - `hashlib` for SHA-512 hashing
-  - `re` for input validation patterns
+- Runtime: Python `3.11`, Conda environment `crypto` (recommended)
+- Web API framework: FastAPI
+- ASGI server: Uvicorn
+- Data validation and request modeling: Pydantic
+- Standard library usage: `hashlib` (SHA-512), `re` (input validation)
 
 ### Deployment and DevOps Stack
-- Platform:
-  - Vercel (separate frontend and backend projects)
-- CLI and automation:
-  - Vercel CLI (`vercel --prod --yes`)
-  - Windows batch automation:
-    - `start.bat` (run local backend + frontend)
-    - `stop.bat` (stop local processes)
-    - `deploy.local.bat` (deploy backend then frontend)
-- Environment configuration:
-  - Frontend environment variable: `REACT_APP_API_BASE`
-  - Backend health probe endpoint: `/health`
-- Deployment model:
-  - Backend deployed from `backend/`
-  - Frontend deployed from `frontend/`
+- Platform: Vercel (separate frontend and backend projects)
+- CLI and automation: Vercel CLI (`vercel --prod --yes`), `start.bat`, `stop.bat`, `deploy.local.bat`
+- Environment configuration: frontend env `REACT_APP_API_BASE`, backend health probe `/health`
+- Deployment model: backend from `backend/`, frontend from `frontend/`
 
 ## Project Structure
 
